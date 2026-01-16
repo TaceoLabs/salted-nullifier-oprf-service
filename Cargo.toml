@@ -1,0 +1,27 @@
+[package]
+name = "salted-nullifier"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+async-trait = "0.1"
+axum = "0.8"
+clap = "4"
+eyre = { version = "0.6" }
+humantime = "2"
+nodes-common = { package = "taceo-nodes-common", version = "0.1" }
+oprf-service = { package = "taceo-oprf-service", version = "0.2.0" }
+oprf-types = { package = "taceo-oprf-types", version = "0.3.0" }
+reqwest = "0.13.1"
+serde = { version = "1", features = ["derive"] }
+thiserror = { version = "2" }
+tokio = { version = "1", features = [
+  "net",
+  "rt-multi-thread",
+  "signal",
+  "sync",
+  "time",
+  "tokio-macros",
+] }
+tracing = { version = "0.1" }
+uuid = { version = "1" }
