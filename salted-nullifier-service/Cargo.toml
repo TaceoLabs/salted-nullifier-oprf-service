@@ -1,0 +1,35 @@
+[package]
+name = "taceo-salted-nullifier-service"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Backend server for salted-nullifier instance of TACEO:OPRF"
+readme.workspace = true
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords = ["cryptography", "mpc", "oprf"]
+publish.workspace = true
+
+[dependencies]
+aws-config = { workspace = true, features = ["behavior-version-latest"] }
+axum = { workspace = true, features = ["ws"] }
+clap = { workspace = true, features = ["derive", "env"] }
+eyre.workspace = true
+humantime.workspace = true
+metrics = { workspace = true }
+nodes-common = { workspace = true }
+nodes-observability = { workspace = true }
+oprf-service = { workspace = true }
+reqwest = { workspace = true }
+rustls = { workspace = true }
+salted-nullifier-authentication = { package = "taceo-salted-nullifier-authentication", path = "../salted-nullifier-authentication", version = "0.1" }
+tokio = { workspace = true, features = [
+  "net",
+  "rt-multi-thread",
+  "signal",
+  "sync",
+  "time",
+  "tokio-macros",
+] }
+tracing.workspace = true

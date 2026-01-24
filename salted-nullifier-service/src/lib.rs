@@ -1,27 +1,29 @@
-use std::sync::Arc;
+use std::sync::{Arc, atomic::Ordering};
 
 use eyre::Context;
 use oprf_service::{StartedServices, secret_manager::SecretManagerService};
+use salted_nullifier_authentication::SaltedNullifierOprfRequestAuthenticator;
 
-use crate::{auth::SaltedNullifierOprfRequestAuthenticator, config::SaltedNullifierOprfNodeConfig};
+use crate::config::SaltedNullifierOprfNodeConfig;
 
-pub(crate) mod auth;
 pub mod config;
+pub mod metrics;
 
-pub async fn start(
+pub async fn start_service(
     config: SaltedNullifierOprfNodeConfig,
     secret_manager: SecretManagerService,
     shutdown_signal: impl std::future::Future<Output = ()> + Send + 'static,
 ) -> eyre::Result<()> {
     tracing::info!("starting oprf-service with config: {config:#?}");
-    let service_config = config.node_config;
-    let cancellation_token = nodes_common::spawn_shutdown_task(shutdown_signal);
+    let service_config = config.service_config;
+    let (cancellation_token, is_graceful_shutdown) =
+        nodes_common::spawn_shutdown_task(shutdown_signal);
 
     tracing::info!("init oprf request auth service..");
     let oprf_req_auth_service = Arc::new(
         SaltedNullifierOprfRequestAuthenticator::init(config.oracle_url)
             .await
-            .context("while starting request authenticator")?,
+            .context("while spawning authenticator")?,
     );
 
     tracing::info!("init oprf service..");
@@ -71,6 +73,9 @@ pub async fn start(
         Ok(_) => tracing::info!("successfully finished shutdown in time"),
         Err(_) => tracing::warn!("could not finish shutdown in time"),
     }
-
-    Ok(())
+    if is_graceful_shutdown.load(Ordering::Relaxed) {
+        Ok(())
+    } else {
+        eyre::bail!("Unexpected shutdown - check error logs")
+    }
 }

@@ -8,11 +8,13 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(Clone, Serialize, Deserialize)]
-pub(crate) struct SaltedNullifierRequestAuth;
+pub struct SaltedNullifierRequestAuth;
 
 #[derive(Debug, thiserror::Error)]
-#[allow(unused)]
-pub(crate) enum SaltedNullifierAuthError {
+pub enum SaltedNullifierAuthError {
+    /// Cannot reach oracle
+    #[error(transparent)]
+    OracleNotRachable(#[from] reqwest::Error),
     /// Internal server error
     #[error(transparent)]
     InternalServerError(#[from] eyre::Report),
@@ -20,7 +22,13 @@ pub(crate) enum SaltedNullifierAuthError {
 
 impl IntoResponse for SaltedNullifierAuthError {
     fn into_response(self) -> axum::response::Response {
+        tracing::debug!("{self:?}");
         match self {
+            SaltedNullifierAuthError::OracleNotRachable(_) => (
+                StatusCode::SERVICE_UNAVAILABLE,
+                "cannot reach oracle".to_owned(),
+            )
+                .into_response(),
             SaltedNullifierAuthError::InternalServerError(err) => {
                 let error_id = Uuid::new_v4();
                 tracing::error!("{error_id} - {err:?}");
@@ -34,23 +42,20 @@ impl IntoResponse for SaltedNullifierAuthError {
     }
 }
 
-pub(crate) struct SaltedNullifierOprfRequestAuthenticator {
-    #[expect(unused)]
+pub struct SaltedNullifierOprfRequestAuthenticator {
     client: reqwest::Client,
+    oracle_url: Url,
 }
 
 impl SaltedNullifierOprfRequestAuthenticator {
-    pub(crate) async fn init(oracle_url: Url) -> eyre::Result<Self> {
+    pub async fn init(oracle_url: Url) -> eyre::Result<Self> {
         // we use the client-builder to avoid panic if we cannot install tls backend
         let client = ClientBuilder::new()
             .build()
             .context("while building reqwest client")?;
-        let health_url = oracle_url
-            .join("/health")
-            .context("while building health url")?;
-        tracing::info!("pinging oracle at: {health_url}");
+        tracing::info!("pinging oracle at: {oracle_url}");
         let response = client
-            .get(health_url)
+            .get(oracle_url.clone())
             .send()
             .await
             .context("while trying to reach oracle")?;
@@ -61,7 +66,7 @@ impl SaltedNullifierOprfRequestAuthenticator {
             tracing::warn!("cannot reach oracle: {response:?}");
             eyre::bail!("cannot reach oracle");
         }
-        Ok(Self { client })
+        Ok(Self { client, oracle_url })
     }
 }
 
@@ -74,7 +79,16 @@ impl OprfRequestAuthenticator for SaltedNullifierOprfRequestAuthenticator {
         &self,
         _request: &OprfRequest<Self::RequestAuth>,
     ) -> Result<(), Self::RequestAuthError> {
-        // TODO use client to request proof
+        tracing::debug!("sending request to oracle");
+        let response = self
+            .client
+            .get(self.oracle_url.clone())
+            .send()
+            .await
+            .context("while trying to reach oracle")?;
+        let _response = response.error_for_status()?;
+        // TODO check if validation was ok or not
+
         Ok(())
     }
 }
