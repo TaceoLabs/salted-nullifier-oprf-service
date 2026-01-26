@@ -1,7 +1,7 @@
 use std::{process::ExitCode, sync::Arc};
 
 use clap::Parser as _;
-use oprf_service::{config::Environment, secret_manager::aws::AwsSecretManager};
+use taceo_oprf::service::{config::Environment, secret_manager::aws::AwsSecretManager};
 use taceo_salted_nullifier_service::config::SaltedNullifierOprfNodeConfig;
 
 #[tokio::main]

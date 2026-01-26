@@ -23,7 +23,6 @@ ark-bn254 = { version = "0.5" }
 ark-ec = "0.5"
 ark-ff = "0.5"
 ark-groth16 = "0.5"
-ark-serde-compat = { package = "taceo-ark-serde-compat", version = "0.2", default-features = false }
 ark-serialize = "0.5"
 async-trait = "0.1"
 aws-config = "1"
@@ -49,10 +48,6 @@ metrics = "0.24"
 nodes-common = { package = "taceo-nodes-common", version = "0.2" }
 nodes-observability = { package = "taceo-nodes-observability", version = "0.1" }
 num-bigint = "0.4"
-oprf-client = { package = "taceo-oprf-client", version = "0.3" }
-oprf-core = { package = "taceo-oprf-core", version = "0.3" }
-oprf-service = { package = "taceo-oprf-service", version = "0.3.0" }
-oprf-types = { package = "taceo-oprf-types", version = "0.4.0" }
 parking_lot = "0.12"
 poseidon2 = { package = "taceo-poseidon2", version = "0.2", default-features = false }
 rand = { version = "0.8" }
@@ -63,6 +58,7 @@ secrecy = "0.10"
 semver = "1"
 serde = { version = "1" }
 serde_json = { version = "1" }
+taceo-oprf = { package = "taceo-oprf", git = "https://github.com/TaceoLabs/oprf-service", rev = "11b7844", version = "0.1" }
 thiserror = { version = "2" }
 tokio = { version = "1" }
 tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }

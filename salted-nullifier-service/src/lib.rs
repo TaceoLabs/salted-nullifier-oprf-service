@@ -1,8 +1,8 @@
 use std::sync::{Arc, atomic::Ordering};
 
 use eyre::Context;
-use oprf_service::{StartedServices, secret_manager::SecretManagerService};
 use salted_nullifier_authentication::SaltedNullifierOprfRequestAuthenticator;
+use taceo_oprf::service::{StartedServices, secret_manager::SecretManagerService};
 
 use crate::config::SaltedNullifierOprfNodeConfig;
 
@@ -27,7 +27,7 @@ pub async fn start_service(
     );
 
     tracing::info!("init oprf service..");
-    let (oprf_service_router, key_event_watcher) = oprf_service::init(
+    let (oprf_service_router, key_event_watcher) = taceo_oprf::service::init(
         service_config,
         secret_manager,
         oprf_req_auth_service,

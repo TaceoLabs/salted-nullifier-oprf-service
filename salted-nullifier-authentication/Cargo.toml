@@ -16,13 +16,12 @@ async-trait = { workspace = true }
 axum = { workspace = true, features = ["ws"] }
 eyre.workspace = true
 http = { workspace = true }
-oprf-service.workspace = true
-oprf-types = { workspace = true }
 reqwest = { workspace = true, features = [
   "json",
   "rustls-tls",
 ] }
 serde = { workspace = true, features = ["derive"] }
+taceo-oprf = { workspace = true }
 thiserror.workspace = true
 tracing.workspace = true
 uuid = { workspace = true, features = ["serde", "v4"] }
