@@ -1,8 +1,11 @@
 use ark_ff::PrimeField as _;
-use oprf_client::{BlindingFactor, Connector};
-use oprf_types::{OprfKeyId, ShareEpoch};
 use rand::{CryptoRng, Rng};
 use salted_nullifier_authentication::SaltedNullifierRequestAuth;
+use taceo_oprf::{
+    client::Connector,
+    core::oprf::BlindingFactor,
+    types::{OprfKeyId, ShareEpoch},
+};
 
 const UNSALTED_NULLIFIER_DS: &[u8] = b"TACEO Unsalted Nullifier Auth";
 
@@ -25,7 +28,7 @@ pub async fn salted_nullifier<R: Rng + CryptoRng>(
     let blinding_factor = BlindingFactor::rand(rng);
     let ds = ark_babyjubjub::Fq::from_be_bytes_mod_order(UNSALTED_NULLIFIER_DS);
 
-    let _verifiable_oprf_output = oprf_client::distributed_oprf(
+    let _verifiable_oprf_output = taceo_oprf::client::distributed_oprf(
         services,
         threshold,
         oprf_key_id,

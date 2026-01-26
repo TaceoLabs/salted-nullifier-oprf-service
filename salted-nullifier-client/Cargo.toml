@@ -14,7 +14,6 @@ publish.workspace = true
 [dependencies]
 ark-babyjubjub.workspace = true
 ark-ff.workspace = true
-oprf-client.workspace = true
-oprf-types.workspace = true
 rand.workspace = true
 salted-nullifier-authentication = { package = "taceo-salted-nullifier-authentication", path = "../salted-nullifier-authentication", version = "0.1" }
+taceo-oprf = { workspace = true, features = ["client"] }

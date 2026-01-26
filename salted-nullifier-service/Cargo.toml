@@ -20,10 +20,10 @@ humantime.workspace = true
 metrics = { workspace = true }
 nodes-common = { workspace = true }
 nodes-observability = { workspace = true }
-oprf-service = { workspace = true }
 reqwest = { workspace = true }
 rustls = { workspace = true }
 salted-nullifier-authentication = { package = "taceo-salted-nullifier-authentication", path = "../salted-nullifier-authentication", version = "0.1" }
+taceo-oprf = { workspace = true, features = ["service"] }
 tokio = { workspace = true, features = [
   "net",
   "rt-multi-thread",
