@@ -3,11 +3,16 @@ use axum::{http::StatusCode, response::IntoResponse};
 use eyre::Context;
 use reqwest::{ClientBuilder, Url};
 use serde::{Deserialize, Serialize};
-use taceo_oprf::types::api::v1::{OprfRequest, OprfRequestAuthenticator};
+use taceo_oprf::types::{
+    OprfKeyId,
+    api::{OprfRequest, OprfRequestAuthenticator},
+};
 use uuid::Uuid;
 
 #[derive(Clone, Serialize, Deserialize)]
-pub struct SaltedNullifierRequestAuth;
+pub struct SaltedNullifierRequestAuth {
+    pub oprf_key_id: OprfKeyId,
+}
 
 #[derive(Debug, thiserror::Error)]
 pub enum SaltedNullifierAuthError {
@@ -74,10 +79,10 @@ impl OprfRequestAuthenticator for SaltedNullifierOprfRequestAuthenticator {
     type RequestAuth = SaltedNullifierRequestAuth;
     type RequestAuthError = SaltedNullifierAuthError;
 
-    async fn verify(
+    async fn authenticate(
         &self,
-        _request: &OprfRequest<Self::RequestAuth>,
-    ) -> Result<(), Self::RequestAuthError> {
+        request: &OprfRequest<Self::RequestAuth>,
+    ) -> Result<OprfKeyId, Self::RequestAuthError> {
         tracing::debug!("sending request to oracle");
         let response = self
             .client
@@ -88,6 +93,6 @@ impl OprfRequestAuthenticator for SaltedNullifierOprfRequestAuthenticator {
         let _response = response.error_for_status()?;
         // TODO check if validation was ok or not
 
-        Ok(())
+        Ok(request.auth.oprf_key_id)
     }
 }

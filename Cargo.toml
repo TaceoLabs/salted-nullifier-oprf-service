@@ -18,7 +18,7 @@ publish = false
 
 [workspace.dependencies]
 alloy = { version = "1.4", default-features = false }
-ark-babyjubjub = { package = "taceo-ark-babyjubjub", version = "^0.5.3" }
+ark-babyjubjub = { package = "taceo-ark-babyjubjub", version = "0.5.3" }
 ark-bn254 = { version = "0.5" }
 ark-ec = "0.5"
 ark-ff = "0.5"
@@ -32,20 +32,20 @@ axum-extra = "0.12"
 axum-test = "18"
 blake3 = "1"
 ciborium = "0.2"
-circom-types = { package = "taceo-circom-types", version = "0.1", default-features = false }
+circom-types = { package = "taceo-circom-types", version = "0.2", default-features = false }
 clap = "4"
 criterion = "0.8"
-eddsa-babyjubjub = { package = "taceo-eddsa-babyjubjub", version = "^0.5.3" }
+eddsa-babyjubjub = { package = "taceo-eddsa-babyjubjub", version = "0.5.4" }
 eyre = { version = "0.6" }
 futures = "0.3"
-groth16-material = { package = "taceo-groth16-material", version = "0.1", default-features = false }
-groth16-sol = { package = "taceo-groth16-sol", version = "0.1" }
+groth16-material = { package = "taceo-groth16-material", version = "0.2.1", default-features = false }
+groth16-sol = { package = "taceo-groth16-sol", version = "0.2.2" }
 http = "1"
 humantime = "2"
 itertools = "0.14"
 k256 = "0.13"
 metrics = "0.24"
-nodes-common = { package = "taceo-nodes-common", version = "0.2" }
+nodes-common = { package = "taceo-nodes-common", version = "0.2.1" }
 nodes-observability = { package = "taceo-nodes-observability", version = "0.1" }
 num-bigint = "0.4"
 parking_lot = "0.12"
@@ -58,7 +58,7 @@ secrecy = "0.10"
 semver = "1"
 serde = { version = "1" }
 serde_json = { version = "1" }
-taceo-oprf = { package = "taceo-oprf", git = "https://github.com/TaceoLabs/oprf-service", rev = "11b7844", version = "0.1" }
+taceo-oprf = { package = "taceo-oprf", version = "0.3" }
 thiserror = { version = "2" }
 tokio = { version = "1" }
 tokio-tungstenite = { version = "0.28", features = ["rustls-tls-webpki-roots"] }
