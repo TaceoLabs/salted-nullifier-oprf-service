@@ -18,11 +18,11 @@ clap = { workspace = true, features = ["derive", "env"] }
 eyre.workspace = true
 humantime.workspace = true
 metrics = { workspace = true }
-nodes-common = { workspace = true }
-nodes-observability = { workspace = true }
 reqwest = { workspace = true }
 rustls = { workspace = true }
 salted-nullifier-authentication = { package = "taceo-salted-nullifier-authentication", path = "../salted-nullifier-authentication", version = "0.1" }
+taceo-nodes-common = { workspace = true }
+taceo-nodes-observability = { workspace = true }
 taceo-oprf = { workspace = true, features = ["service"] }
 tokio = { workspace = true, features = [
   "net",
@@ -32,4 +32,5 @@ tokio = { workspace = true, features = [
   "time",
   "tokio-macros",
 ] }
+tokio-util.workspace = true
 tracing.workspace = true

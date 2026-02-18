@@ -31,5 +31,5 @@ pub struct SaltedNullifierOprfNodeConfig {
 
     /// The OPRF node config
     #[clap(flatten)]
-    pub service_config: OprfNodeConfig,
+    pub node_config: OprfNodeConfig,
 }
