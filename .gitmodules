@@ -1,0 +1,3 @@
+[submodule "oprf-key-registry"]
+	path = oprf-key-registry
+	url = git@github.com:TaceoLabs/oprf-key-registry
