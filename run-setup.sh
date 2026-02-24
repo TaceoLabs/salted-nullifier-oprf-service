@@ -81,7 +81,7 @@ start_node() {
 
 teardown() {
     docker compose -f ./deploy/local/docker-compose.yml down || true
-    killall -9 taceo-salted-nullifier-service 2>/dev/null || true
+    killall -9 taceo-salted-nullifier-node 2>/dev/null || true
     killall -9 anvil 2>/dev/null || true
 }
 
