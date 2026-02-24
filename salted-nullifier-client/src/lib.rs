@@ -1,17 +1,17 @@
 use ark_ff::PrimeField as _;
+use eyre::Context;
 use rand::{CryptoRng, Rng};
 use salted_nullifier_authentication::SaltedNullifierRequestAuth;
 use taceo_oprf::{
     client::{Connector, VerifiableOprfOutput},
     core::oprf::BlindingFactor,
-    dev_client::oprf_test_utils::eyre,
     types::OprfKeyId,
 };
 
 const UNSALTED_NULLIFIER_DS: &[u8] = b"TACEO Unsalted Nullifier Auth";
 
 fn compute_encrypted_unsalted_nullifier(
-    oprf_key_id: OprfKeyId,
+    _oprf_key_id: OprfKeyId,
 ) -> (SaltedNullifierRequestAuth, ark_babyjubjub::Fq) {
     // TODO
     // compute the face-match proof(or provide it from non-rust land)
@@ -41,7 +41,7 @@ pub async fn salted_nullifier<R: Rng + CryptoRng>(
         connector,
     )
     .await
-    .expect("TODO handle error case");
+    .context("while computing distributed OPRF")?;
 
     // TODO
     // post processing of verifiable oprf-output
