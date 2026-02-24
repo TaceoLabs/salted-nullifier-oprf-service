@@ -11,12 +11,10 @@ use taceo_oprf::{
 const UNSALTED_NULLIFIER_DS: &[u8] = b"TACEO Unsalted Nullifier Auth";
 
 fn compute_encrypted_unsalted_nullifier(
-    _oprf_key_id: OprfKeyId,
+    oprf_key_id: OprfKeyId,
 ) -> (SaltedNullifierRequestAuth, ark_babyjubjub::Fq) {
-    // TODO
-    // compute the face-match proof(or provide it from non-rust land)
-    // compute the blinded query (the unsalted encrypted nullifier)
-    todo!()
+    let auth = SaltedNullifierRequestAuth { oprf_key_id };
+    (auth, rand::random())
 }
 
 pub async fn salted_nullifier<R: Rng + CryptoRng>(

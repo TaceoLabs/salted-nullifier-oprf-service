@@ -83,7 +83,7 @@ impl OprfRequestAuthenticator for SaltedNullifierOprfRequestAuthenticator {
         &self,
         request: &OprfRequest<Self::RequestAuth>,
     ) -> Result<OprfKeyId, Self::RequestAuthError> {
-        tracing::debug!("sending request to oracle");
+        tracing::debug!("sending request to oracle: {}", self.oracle_url);
         let response = self
             .client
             .get(self.oracle_url.clone())
@@ -92,6 +92,7 @@ impl OprfRequestAuthenticator for SaltedNullifierOprfRequestAuthenticator {
             .context("while trying to reach oracle")?;
         let _response = response.error_for_status()?;
         // TODO check if validation was ok or not
+        tracing::debug!("got a success response :)");
 
         Ok(request.auth.oprf_key_id)
     }
