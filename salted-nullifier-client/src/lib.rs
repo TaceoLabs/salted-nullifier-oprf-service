@@ -1,11 +1,18 @@
 use ark_ff::PrimeField as _;
 use rand::{CryptoRng, Rng};
 use salted_nullifier_authentication::SaltedNullifierRequestAuth;
-use taceo_oprf::{client::Connector, core::oprf::BlindingFactor};
+use taceo_oprf::{
+    client::{Connector, VerifiableOprfOutput},
+    core::oprf::BlindingFactor,
+    dev_client::oprf_test_utils::eyre,
+    types::OprfKeyId,
+};
 
 const UNSALTED_NULLIFIER_DS: &[u8] = b"TACEO Unsalted Nullifier Auth";
 
-fn compute_encrypted_unsalted_nullifier() -> (SaltedNullifierRequestAuth, ark_babyjubjub::Fq) {
+fn compute_encrypted_unsalted_nullifier(
+    oprf_key_id: OprfKeyId,
+) -> (SaltedNullifierRequestAuth, ark_babyjubjub::Fq) {
     // TODO
     // compute the face-match proof(or provide it from non-rust land)
     // compute the blinded query (the unsalted encrypted nullifier)
@@ -15,14 +22,15 @@ fn compute_encrypted_unsalted_nullifier() -> (SaltedNullifierRequestAuth, ark_ba
 pub async fn salted_nullifier<R: Rng + CryptoRng>(
     services: &[String],
     threshold: usize,
+    oprf_key_id: OprfKeyId,
     connector: Connector,
     rng: &mut R,
-) {
-    let (oprf_request_auth, query_hash) = compute_encrypted_unsalted_nullifier();
+) -> eyre::Result<VerifiableOprfOutput> {
+    let (oprf_request_auth, query_hash) = compute_encrypted_unsalted_nullifier(oprf_key_id);
     let blinding_factor = BlindingFactor::rand(rng);
     let ds = ark_babyjubjub::Fq::from_be_bytes_mod_order(UNSALTED_NULLIFIER_DS);
 
-    let _verifiable_oprf_output = taceo_oprf::client::distributed_oprf(
+    let verifiable_oprf_output = taceo_oprf::client::distributed_oprf(
         services,
         "face",
         threshold,
@@ -38,4 +46,5 @@ pub async fn salted_nullifier<R: Rng + CryptoRng>(
     // TODO
     // post processing of verifiable oprf-output
     // potentially won't happen in rust land, therefore maybe we don't really need anything here
+    Ok(verifiable_oprf_output)
 }
