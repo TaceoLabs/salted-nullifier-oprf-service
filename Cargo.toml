@@ -4,7 +4,7 @@ members = [
   "salted-nullifier-authentication",
   "salted-nullifier-client",
   "salted-nullifier-dev-client",
-  "salted-nullifier-service",
+  "salted-nullifier-node",
 ]
 
 [workspace.package]

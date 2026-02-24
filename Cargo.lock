@@ -5977,7 +5977,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "taceo-salted-nullifier-service"
+name = "taceo-salted-nullifier-node"
 version = "0.1.0"
 dependencies = [
  "aws-config",

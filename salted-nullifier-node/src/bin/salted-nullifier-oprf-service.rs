@@ -3,11 +3,11 @@ use std::{process::ExitCode, sync::Arc};
 use clap::Parser as _;
 use eyre::Context as _;
 use taceo_oprf::service::secret_manager::postgres::PostgresSecretManager;
-use taceo_salted_nullifier_service::config::SaltedNullifierOprfNodeConfig;
+use taceo_salted_nullifier_node::config::SaltedNullifierOprfNodeConfig;
 
 async fn run() -> eyre::Result<()> {
     taceo_oprf::service::metrics::describe_metrics();
-    taceo_salted_nullifier_service::metrics::describe_metrics();
+    taceo_salted_nullifier_node::metrics::describe_metrics();
 
     tracing::info!("{}", taceo_nodes_common::version_info!());
 
@@ -37,7 +37,7 @@ async fn run() -> eyre::Result<()> {
 
     tracing::info!("starting world-node service...");
     let (oprf_service_router, oprf_node_tasks) =
-        taceo_salted_nullifier_service::start(config, secret_manager, cancellation_token.clone())
+        taceo_salted_nullifier_node::start(config, secret_manager, cancellation_token.clone())
             .await?;
 
     let server = tokio::spawn({
