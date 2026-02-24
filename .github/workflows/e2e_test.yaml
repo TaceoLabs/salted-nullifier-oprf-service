@@ -1,4 +1,4 @@
-name: Rust Unit & Integration Tests
+name: E2E Tests
 
 on:
   push:
@@ -20,8 +20,8 @@ env:
   FOUNDRY_PROFILE: ci
 
 jobs:
-  test:
-    name: Test
+  e2e-test:
+    name: Run E2E Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -30,6 +30,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
+      - uses: foundry-rs/foundry-toolchain@v1
+      - run: cd contracts && forge install && forge build
       - uses: Swatinem/rust-cache@v2
-      - name: Run Rust Tests
-        run: cargo test --release --workspace --all-features
+      - name: Run E2E Test
+        run: bash run-setup.sh e2e-test
