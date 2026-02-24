@@ -35,7 +35,7 @@ struct SaltedNullifierDevClientSetup {
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
     taceo_nodes_observability::install_tracing(
-        "taceo_oprf_dev_client=trace,dev_client_example=trace,warn",
+        "taceo_oprf_dev_client=trace,salted_nullifier_dev_client=trace,warn",
     );
     rustls::crypto::aws_lc_rs::default_provider()
         .install_default()
