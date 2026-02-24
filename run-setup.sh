@@ -30,28 +30,6 @@ wait_for_health() {
     done
 }
 
-wait_for_oprf_pub() {
-    local port=$1
-    local timeout=${3:-60}
-    local start_time=$(date +%s)
-    local oprf_key_id=$2
-    echo "waiting for orpf key id $oprf_key_id on port $port to be ready..."
-
-    while true; do
-        http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:$port/oprf_pub/$oprf_key_id" || echo "000")
-        if [[ "$http_code" == "200" ]]; then
-            echo "Found oprf key id $oprf_key_id"
-            break
-        fi
-        now=$(date +%s)
-        if (( now - start_time >= timeout )); then
-            echo -e "${RED}error: oprf key id $oprf_key_id was not found after $timeout seconds${NOCOLOR}" >&2
-            exit 1
-        fi
-        sleep 1
-    done
-}
-
 deploy_contracts() {
     # deploy OprfKeyRegistry for 3 nodes and register anvil wallets 7,8,9 as participants
     (cd contracts && TACEO_ADMIN_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 THRESHOLD=2 NUM_PEERS=3 forge script script/deploy/OprfKeyRegistryWithDeps.s.sol --broadcast --fork-url http://127.0.0.1:8545 --private-key $PK)
@@ -81,7 +59,7 @@ start_node() {
 
 teardown() {
     docker compose -f ./deploy/local/docker-compose.yml down || true
-    killall -9 taceo-salted-nullifier-node 2>/dev/null || true
+    killall -9 taceo-salted-nullifier-service 2>/dev/null || true
     killall -9 anvil 2>/dev/null || true
 }
 
