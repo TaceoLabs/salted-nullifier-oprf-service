@@ -3293,7 +3293,7 @@ dependencies = [
  "libc",
  "percent-encoding",
  "pin-project-lite",
- "socket2 0.5.10",
+ "socket2 0.6.2",
  "tokio",
  "tower-service",
  "tracing",
@@ -4426,7 +4426,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.36",
- "socket2 0.5.10",
+ "socket2 0.6.2",
  "thiserror 2.0.18",
  "tokio",
  "tracing",
@@ -4463,9 +4463,9 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.5.10",
+ "socket2 0.6.2",
  "tracing",
- "windows-sys 0.52.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -5710,15 +5710,17 @@ dependencies = [
 
 [[package]]
 name = "taceo-nodes-common"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b367a1b249843f1f58f9a9fde1830b3754959e9df64d94ef5764381d5df4b0ec"
+checksum = "234825369ef6b6954ac83b8eed36558bd1ff71672d7650b82de4c13ea59bd1c5"
 dependencies = [
  "aws-config",
  "aws-sdk-secretsmanager",
+ "axum",
  "git-version",
  "tokio",
  "tokio-util",
+ "tower-http",
  "tracing",
 ]
 
